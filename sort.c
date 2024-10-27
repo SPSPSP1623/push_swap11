@@ -46,19 +46,22 @@ void	sort_four(t_stack **stack_a, t_stack **stack_b)
 
 void	sort_five(t_stack **stack_a, t_stack **stack_b)
 {
-	if ((*stack_a)->next->index == 0)
+	int	min_index;
+
+	min_index = get_min_index(*stack_a);
+	if ((*stack_a)->next->index == min_index)
 		sa(stack_a);
-	else if ((*stack_a)->next->next->index == 0)
+	else if ((*stack_a)->next->next->index == min_index)
 	{
 		ra(stack_a);
 		ra(stack_a);
 	}
-	else if ((*stack_a)->next->next->next->index == 0)
+	else if ((*stack_a)->next->next->next->index == min_index)
 	{
 		rra(stack_a);
 		rra(stack_a);
 	}
-	else if ((*stack_a)->next->next->next->next->index == 0)
+	else if ((*stack_a)->next->next->next->next->index == min_index)
 		rra(stack_a);
 	pb(stack_a, stack_b);
 	sort_four(stack_a, stack_b);
