@@ -1,41 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memcpy.c                                        :+:      :+:    :+:   */
+/*   ft_atol.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: speladea <speladea@student.42.fr>          #+#  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024-05-17 15:39:56 by speladea          #+#    #+#             */
-/*   Updated: 2024-05-17 15:39:56 by speladea         ###   ########.fr       */
+/*   Created: 2024-05-16 12:01:33 by speladea          #+#    #+#             */
+/*   Updated: 2024-05-16 12:01:33 by speladea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memcpy(void *dest, const void *src, size_t n)
+long	ft_atol(const char *nptr)
 {
-	size_t	i;
-	char	*ptr_dest;
-	char	*ptr_src;
+	long	nb;
+	long	even;
 
-	if (dest == NULL && src == NULL)
+	nb = 0;
+	even = 1;
+	if (*nptr == '-')
 	{
-		return (NULL);
+		even = -1;
+		nptr++;
 	}
-	i = 0;
-	ptr_dest = (char *)dest;
-	ptr_src = (char *)src;
-	while (i < n)
+	else if (*nptr == '+')
+		nptr++;
+	while (*nptr)
 	{
-		ptr_dest[i] = ptr_src[i];
-		i++;
+		nb = nb * 10 + (*nptr++ - '0');
 	}
-	return (ptr_dest);
+	nb = nb * even;
+	return (nb);
 }
-
-/*int	main(void)
-{
-	char	*dest = "simon";
-	char	*src = "SIMON";
-	printf("%d", printf(dest, src, 4));
-}*/

@@ -1,40 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: speladea <speladea@student.42.fr>          #+#  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024-05-16 13:01:41 by speladea          #+#    #+#             */
-/*   Updated: 2024-05-16 13:01:41 by speladea         ###   ########.fr       */
+/*   Created: 2024-05-20 14:26:37 by speladea          #+#    #+#             */
+/*   Updated: 2024-05-20 14:26:37 by speladea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strchr(const char *s, int c)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	int	i;
+	int		i;
+	int		j;
+	char	*s3;
 
+	s3 = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2)) + 2);
+	if (!s3)
+		return (NULL);
 	i = 0;
-	while (s[i] != '\0')
+	j = 0;
+	while (s1[j] != '\0')
 	{
-		if (s[i] == (unsigned char)c)
-		{
-			return ((char *)&s[i]);
-		}
+		s3[i] = s1[j];
 		i++;
+		j++;
 	}
-	if (s[i] == (unsigned char)c)
+	s3[i++] = ' ';
+	j = 0;
+	while (s2[j] != '\0')
 	{
-		return ((char *)&s[i]);
+		s3[i] = s2[j];
+		i++;
+		j++;
 	}
-	return (NULL);
+	s3[i] = '\0';
+	return (s3);
 }
-
-/*int	main(void)
-{
-	char	s[13] = "je suis simon";
-
-	printf("%s", ft_strchr(s, 'i'));
-}*/

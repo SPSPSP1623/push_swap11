@@ -1,47 +1,57 @@
-CC = cc
-CFLAGS = -Wall -Wextra -Werror
+#Default Cflags used for compilation
+CFLAGS := -Wall -Wextra -MMD -g3
 
+# Directory where are located header files
+INCLUDE_DIR := includes
 
-RM = rm -rf
+# Variable that will store flags command to include headers
+INCLUDES := -I$(INCLUDE_DIR)
 
-NAME = libft.a
+OBJ_DIR := objs
 
-LIBC = ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c ft_strlen.c \
-		ft_toupper.c ft_tolower.c ft_atoi.c ft_atol.c ft_strlcpy.c ft_strlcat.c \
-		ft_strchr.c ft_strrchr.c ft_strncmp.c ft_strdup.c ft_strnstr.c ft_memset.c \
-		ft_bzero.c ft_memcpy.c ft_memmove.c ft_memcmp.c ft_calloc.c
+SRC_DIR := src
 
-ADDITIONAL = ft_substr.c ft_strjoin.c ft_strtrim.c ft_itoa.c \
-		ft_putchar_fd.c ft_putstr_fd.c ft_strmapi.c \
-		ft_striteri.c ft_putendl_fd.c ft_putnbr_fd.c ft_split.c
+SRCS := $(shell find $(SRC_DIR) -name '*.c')
 
-BONUS = ft_lstnew_bonus.c ft_lstadd_front_bonus.c ft_lstsize_bonus.c \
-		ft_lstlast_bonus.c ft_lstadd_back_bonus.c ft_lstdelone_bonus.c \
-		ft_lstclear_bonus.c ft_lstiter_bonus.c ft_lstmap_bonus.c
+OBJS := $(addprefix $(OBJ_DIR)/,$(addsuffix .o,$(notdir $(basename $(SRCS)))))
+DEPEND = $(OBJS:.o=.d)
 
-SRCS = ${LIBC} ${ADDITIONAL}
-OBJS = ${SRCS:.c=.o}
+# Directory where will the builded library will be stored
+LIB_FOLDER := lib
 
-SRCS_ALL = ${LIBC} ${ADDITIONAL} ${BONUS}
-OBJS_ALL = ${SRCS_ALL:.c=.o}
+# Library name
+LIB_NAME := libft.a
 
-all: $(NAME)
+# Library path
+LIB := $(LIB_FOLDER)/$(LIB_NAME)
 
-$(NAME): $(OBJS)
-	ar rcs $(NAME) $(OBJS)
+all : $(LIB)
 
-bonus: ${OBJS_ALL}
-	ar rcs $(NAME) $(OBJS_ALL)
+$(LIB) : $(OBJS)
+		@mkdir -p lib
+		ar rcs $@ $^
 
-%.o: %.c
-		$(CC) $(CFLAGS) -I includes/ -c $< -o $(<:.c=.o)
+# Rule to generate all object file and create OBJ_DIR if not exist
+$(OBJ_DIR)/%.o : $(SRC_DIR)/%.c | $(OBJ_DIR)
+		$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
-clean:
-	$(RM) $(OBJS_ALL)
+# Header dependencies. Adds the rules in the .d files, if they exists, in order to
+# add headers as dependencies of obj files (see .d files).
+# This rules will be merged with the previous rules.
+-include $(DEPEND)
 
-fclean: clean
-	$(RM) $(NAME)
+$(OBJ_DIR): ; @mkdir -p $@
 
-re: fclean all
+# Removes all the build directories (objs, deps), executable and library and recreate them
+.PHONY : re
+re : fclean $(LIB)
 
-.PHONY: all clean fclean re bonus
+# Removes all the build directories (objs, deps), executable and library
+.PHONY : fclean
+fclean : clean
+		rm -rf $(LIB_FOLDER) $(OBJ_DIR)
+
+# Removes the obj directory
+.PHONY : clean
+clean :
+		rm -rf $(OBJ_DIR)

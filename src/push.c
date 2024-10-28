@@ -1,36 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_bzero.c                                         :+:      :+:    :+:   */
+/*   push.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: speladea <speladea@student.42.fr>          #+#  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024-05-17 15:33:09 by speladea          #+#    #+#             */
-/*   Updated: 2024-05-17 15:33:09 by speladea         ###   ########.fr       */
+/*   Created: 2024-10-22 18:22:11 by speladea          #+#    #+#             */
+/*   Updated: 2024-10-22 18:22:11 by speladea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+# include "push_swap.h"
 
-void	ft_bzero(void *s, size_t n)
+void	push(t_stack **src, t_stack **dest)
 {
-	ft_memset(s, '\0', n);
+	t_stack	*tmp;
+
+	if (!*src)
+		return ;
+	tmp = (*src)->next;
+	(*src)->next = *dest;
+	*dest = *src;
+	*src = tmp;
 }
 
-/*int	main(void)
+void	pa(t_stack **stack_a, t_stack **stack_b)
 {
-	char	s[12] = "test ecole42";
-	size_t	i;
+	push(stack_b, stack_a);
+	ft_printf("pa\n");
+}
 
-	printf("before %s\n", s);
-	ft_bzero(s, 5);
-	i = 0;
-	while (i < sizeof(s))
-	{
-		if (s[i] == '\0')
-			printf("0");
-		else
-			printf("%c", s[i]);
-		i++;
-	}
-}*/
+void	pb(t_stack **stack_a, t_stack **stack_b)
+{
+	push(stack_a, stack_b);
+	ft_printf("pb\n");
+}

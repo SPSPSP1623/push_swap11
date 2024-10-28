@@ -1,28 +1,57 @@
-CC = cc
-CFLAGS = -Wall -Werror -Wextra
+#Default Cflags used for compilation
+CFLAGS := -Wall -Wextra -MMD -g3
 
-RM = rm -rf
+# Directory where are located header files
+INCLUDE_DIR := includes
 
-NAME = libftprintf.a
+# Variable that will store flags command to include headers
+INCLUDES := -I$(INCLUDE_DIR)
 
-SRCS = ft_printf.c ft_format_id.c ft_print_c.c ft_print_di.c ft_print_s.c ft_print_u.c ft_print_x.c ft_print_p.c
-OBJS = ${SRCS:.c=.o}
+OBJ_DIR := objs
 
-all: $(NAME)
+SRC_DIR := src
 
-$(NAME): $(OBJS)
-	ar rcs $(NAME) $(OBJS)
+SRCS := $(shell find $(SRC_DIR) -name '*.c')
 
-%.o: %.c
-		$(CC) $(CFLAGS) -I includes/ -c $< -o $(<:.c=.o)
+OBJS := $(addprefix $(OBJ_DIR)/,$(addsuffix .o,$(notdir $(basename $(SRCS)))))
+DEPEND = $(OBJS:.o=.d)
 
-clean:
-	$(RM) $(OBJS)
+# Directory where will the builded library will be stored
+LIB_FOLDER := lib
 
-fclean: clean
-	$(RM) $(NAME)
+# Library name
+LIB_NAME := libftprintf.a
 
-re: fclean all
+# Library path
+LIB := $(LIB_FOLDER)/$(LIB_NAME)
 
-.PHONY: all clean fclean re
+all : $(LIB)
 
+$(LIB) : $(OBJS)
+		@mkdir -p lib
+		ar rcs $@ $^
+
+# Rule to generate all object file and create OBJ_DIR if not exist
+$(OBJ_DIR)/%.o : $(SRC_DIR)/%.c | $(OBJ_DIR)
+		$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+
+# Header dependencies. Adds the rules in the .d files, if they exists, in order to
+# add headers as dependencies of obj files (see .d files).
+# This rules will be merged with the previous rules.
+-include $(DEPEND)
+
+$(OBJ_DIR): ; @mkdir -p $@
+
+# Removes all the build directories (objs, deps), executable and library and recreate them
+.PHONY : re
+re : fclean $(LIB)
+
+# Removes all the build directories (objs, deps), executable and library
+.PHONY : fclean
+fclean : clean
+		rm -rf $(LIB_FOLDER) $(OBJ_DIR)
+
+# Removes the obj directory
+.PHONY : clean
+clean :
+		rm -rf $(OBJ_DIR)
