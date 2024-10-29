@@ -50,7 +50,7 @@ void	sb(t_stack **stack_b);
 void	sort_three(t_stack **stack_a);
 void	sort_four(t_stack **stack_a, t_stack **stack_b);
 void	sort_five(t_stack **stack_a, t_stack **stack_b);
-void	sort_more(t_stack **stack_a, t_stack **stack_b);
+void	sort_more(t_stack **stack_a, t_stack **stack_b, int len);
 
 // UTILS
 
