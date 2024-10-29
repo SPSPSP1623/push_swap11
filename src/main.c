@@ -47,7 +47,7 @@ void	push_swap(t_stack **stack_a, t_stack **stack_b)
 	if (len == 5)
 		sort_five(stack_a, stack_b);
 	if (len > 5)
-		sort_more(stack_a, stack_b);
+		sort_more(stack_a, stack_b, len);
 }
 
 
