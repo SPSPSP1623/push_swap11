@@ -68,14 +68,12 @@ void	sort_five(t_stack **stack_a, t_stack **stack_b)
 	pa(stack_a, stack_b);
 }
 
-void	sort_more(t_stack **stack_a, t_stack **stack_b)
+void	sort_more(t_stack **stack_a, t_stack **stack_b, int len)
 {
-	int	len;
 	int	max_b;
 	int	i;
 	int	j;
 
-	len = stack_len(*stack_a);
 	max_b = max_bits(*stack_a);
 	i = 0;
 	while (i < max_b)
